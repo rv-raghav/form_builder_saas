@@ -13,6 +13,7 @@
     "@repo/typescript-config": "workspace:*",
     "@swc/core": "^1.15.8",
     "@types/cors": "^2.8.19",
+    "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.6",
     "@types/node": "^22.15.3",
     "dotenv-cli": "^11.0.0",
@@ -21,8 +22,11 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@repo/services": "workspace:*",
     "@repo/trpc": "workspace:*",
     "@repo/logger": "workspace:*",
+    "cookie-parser": "^1.4.7",
+    "express-rate-limit": "^7.5.0",
     "@scalar/express-api-reference": "^0.8.30",
     "@trpc/server": "^11.8.1",
     "cors": "^2.8.5",

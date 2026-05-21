@@ -1,135 +1,108 @@
-# Turborepo starter
+# ChaiForms — Form Builder SaaS (tRPC Monorepo)
 
-This Turborepo starter is maintained by the Turborepo core team.
+pnpm + Turborepo monorepo for a hackathon form-builder platform.
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
+**Product requirements:** [docs/PRD.md](./docs/PRD.md)
 
 ## What's inside?
 
-This Turborepo includes the following packages/apps:
+### Apps
 
-### Apps and Packages
+- **`web`**: Vite + React 19 dashboard — [http://localhost:3000](http://localhost:3000)
+- **`@repo/api`**: Express + tRPC + REST auth — [http://localhost:8000](http://localhost:8000)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Packages
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- `@repo/trpc` — shared tRPC router
+- `@repo/services` — auth & business logic
+- `@repo/database` — Drizzle ORM + Postgres
 
-### Utilities
+## Setup
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```sh
+cp .env.example .env
+./setup.sh
+docker compose up -d
+pnpm install
+pnpm db:migrate
+pnpm db:seed
+pnpm dev
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Demo credentials
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+| Role | Email | Password |
+|------|-------|----------|
+| Superadmin | `superadmin@demo.com` | `Demo123!` |
+| Admin | `admin@demo.com` | `Demo123!` |
+| Creator | `creator@demo.com` | `Demo123!` |
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+## URLs
 
-### Develop
+| Service | URL |
+|---------|-----|
+| Landing | http://localhost:3000 |
+| Explore (public forms) | http://localhost:3000/explore |
+| Submissions | http://localhost:3000/submissions |
+| Public fill | `http://localhost:3000/f/{slug}` (e.g. `demo-event-rsvp`) |
+| API docs (Scalar) | http://localhost:8000/docs |
+| OpenAPI JSON | http://localhost:8000/openapi.json |
 
-To develop all apps and packages, run the following command:
+## Develop
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```sh
+pnpm dev                 # web + api (not Drizzle Studio)
+pnpm db:studio           # Drizzle Studio → https://local.drizzle.studio
+pnpm --filter web dev    # frontend only
+pnpm --filter @repo/api dev
 ```
 
-### Remote Caching
+## Auth API (REST)
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Cookie-based sessions with CSRF. Endpoints under `/api/auth/*` — see Scalar docs.
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## Admin APIs (Phase 2)
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+| Area | Endpoints |
+|------|-----------|
+| Users | `GET/POST /api/users/`, `PATCH/DELETE /api/users/:id/`, activate/deactivate |
+| Roles | `GET /api/roles/` |
+| Access control | `GET /api/access-control/`, toggle page/component per role |
+| User overrides | `GET /api/users/:id/effective-permissions/`, permission override CRUD |
 
-```
-cd my-turborepo
+**Policy:** Admins manage creators only; Superadmin manages all roles and access-control toggles.
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+## Forms API (Phase 3)
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
+| Method | Endpoint |
+|--------|----------|
+| GET | `/api/forms/` |
+| POST | `/api/forms/` |
+| GET/PATCH/DELETE | `/api/forms/:id/` |
+| POST | `/api/forms/:id/publish/`, `unpublish/`, `duplicate/` |
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Demo forms (after seed, creator account): `demo-event-rsvp`, `demo-community-signup`, `demo-product-feedback` (all public + published). Sample responses are inserted on first seed when none exist.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## Responses & analytics (Phase 5)
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
+| Method | Endpoint |
+|--------|----------|
+| GET | `/api/forms/:formId/analytics/` — total count + UTC daily buckets (14 days) |
+| GET | `/api/forms/:formId/responses/?page=&page_size=` |
+| GET | `/api/forms/:formId/responses/:responseId/` |
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
+**Dashboard:** `/submissions` — form picker, table, chart, response detail modal.
 
-## Useful Links
+When a **public form** receives a submission, the **owner gets an email** if `SMTP_*` vars are set; otherwise the API logs a dev-friendly notification line (same optional SMTP vars as `/api/password-reset/`).
 
-Learn more about the power of Turborepo:
+## Public API (Phase 4)
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+No authentication. Rate-limited submit endpoint.
+
+| Method | Endpoint |
+|--------|----------|
+| GET | `/api/public/explore/` — published + **public** visibility only |
+| GET | `/api/public/forms/:slug/` — published forms only (public or unlisted) |
+| POST | `/api/public/forms/:slug/submit/` — body: `{ answers: { [fieldUuid]: value }, website?: "" }` (honeypot) |
+
+**Rules:** Draft forms → 404 `not_published`. Unlisted forms are hidden from explore but work at `/f/:slug`.

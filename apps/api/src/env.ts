@@ -4,6 +4,14 @@ const envSchema = z.object({
   PORT: z.string().optional(),
   NODE_ENV: z.enum(["development", "prod"]).default("development"),
   BASE_URL: z.string().default("http://localhost:8000"),
+  SESSION_SECRET: z.string().min(16).default("dev-session-secret-change-me"),
+  CSRF_SECRET: z.string().min(16).default("dev-csrf-secret-change-me"),
+  COOKIE_SECURE: z
+    .string()
+    .optional()
+    .transform((v) => v === "true"),
+  COOKIE_DOMAIN: z.string().optional(),
+  APP_URL: z.string().url().default("http://localhost:3000"),
 });
 
 function createEnv(env: NodeJS.ProcessEnv) {
