@@ -69,8 +69,8 @@ export default function ResetPassword() {
     return (
         <>
             <PageMeta
-                title="Reset Password | Creative Dashboard"
-                description="Reset password page for Creative Dashboard"
+                title="Reset Password | ChaiForms"
+                description="Reset password page for ChaiForms"
             />
             <AuthLayout>
                 <div className="flex flex-col flex-1">

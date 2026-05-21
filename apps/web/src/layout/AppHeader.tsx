@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { useSidebar } from '../context/SidebarContext';
 import { ThemeToggleButton } from '../components/common/ThemeToggleButton';
-import NotificationDropdown from '../components/header/NotificationDropdown';
 import UserDropdown from '../components/header/UserDropdown';
 
 import { CloseIcon, MenuIcon, HorizontaLDots, SearchIcon } from '../icons';
@@ -12,9 +11,9 @@ import { useComponentPermission } from '../hooks/useComponentPermission';
 const AppHeader: React.FC = () => {
     const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
     const hasSearchBar = useComponentPermission('search-bar');
-    const hasNotifications = useComponentPermission('notifications');
 
     const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
+
 
     const handleToggle = () => {
         if (window.innerWidth >= 1024) {
@@ -109,9 +108,6 @@ const AppHeader: React.FC = () => {
                     <div className="flex items-center gap-2 2xsm:gap-3">
                         {/* Theme Toggle - always visible */}
                         <ThemeToggleButton />
-
-                        {/* <!-- Notification Menu Area --> */}
-                        {hasNotifications && <NotificationDropdown />}
                     </div>
                     {/* <!-- User Area --> */}
                     <UserDropdown />

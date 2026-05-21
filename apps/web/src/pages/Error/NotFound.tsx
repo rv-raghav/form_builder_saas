@@ -6,7 +6,7 @@ export default function NotFound() {
     return (
         <>
             <PageMeta
-                title="404 - Page Not Found | Creative Dashboard"
+                title="404 - Page Not Found | ChaiForms"
                 description="The page you are looking for could not be found"
             />
             <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">
@@ -32,7 +32,7 @@ export default function NotFound() {
                 </div>
                 {/* <!-- Footer --> */}
                 <p className="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
-                    &copy; {new Date().getFullYear()} - Creative Dashboard
+                    &copy; {new Date().getFullYear()} - ChaiForms
                 </p>
             </div>
         </>

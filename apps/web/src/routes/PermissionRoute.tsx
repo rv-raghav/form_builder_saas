@@ -31,7 +31,7 @@ function WelcomeMessage() {
                     </div>
                 </div>
                 <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-3">
-                    Welcome to Creative Dashboard!
+                    Welcome to ChaiForms!
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400">
                     Navigate to your authorized pages using the sidebar menu.

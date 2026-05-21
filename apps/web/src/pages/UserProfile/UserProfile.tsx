@@ -9,8 +9,8 @@ export default function UserProfile() {
     return (
         <>
             <PageMeta
-                title="Profile | Creative Dashboard"
-                description="User profile page for Creative Dashboard"
+                title="Profile | ChaiForms"
+                description="User profile page for ChaiForms"
             />
             <PageBreadcrumb pageTitle="Profile" />
             <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">

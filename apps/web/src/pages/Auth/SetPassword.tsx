@@ -77,8 +77,8 @@ export default function SetPassword() {
     return (
         <>
             <PageMeta
-                title="Set Your Password | Creative Dashboard"
-                description="Set your password for Creative Dashboard"
+                title="Set Your Password | ChaiForms"
+                description="Set your password for ChaiForms"
             />
             <AuthLayout>
                 <div className="flex flex-col flex-1">

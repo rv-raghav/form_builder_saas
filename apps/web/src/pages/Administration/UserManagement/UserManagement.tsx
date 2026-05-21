@@ -388,7 +388,7 @@ function UserManagement() {
 
             <div>
                 <PageMeta
-                    title="User Management | Creative Dashboard"
+                    title="User Management | ChaiForms"
                     description="Manage users and their roles"
                 />
                 <PageBreadcrumb pageTitle="User Management" />

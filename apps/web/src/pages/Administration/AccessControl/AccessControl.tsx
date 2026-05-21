@@ -304,7 +304,7 @@ const AccessControl: React.FC = () => {
     return (
         <div>
             <PageMeta
-                title="Access Control | Creative Dashboard"
+                title="Access Control | ChaiForms"
                 description="Manage role-based access for pages and their nested components"
             />
             <PageBreadcrumb pageTitle="Access Control" />

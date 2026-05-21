@@ -42,13 +42,6 @@ export const COMPONENT_CATALOG: ComponentCatalogEntry[] = [
     pageSlug: "dashboard",
     category: "header",
   },
-  {
-    slug: "notifications",
-    name: "Notifications",
-    description: "Notification bell in header",
-    pageSlug: "dashboard",
-    category: "header",
-  },
 ];
 
 export const ROLE_CATALOG = [

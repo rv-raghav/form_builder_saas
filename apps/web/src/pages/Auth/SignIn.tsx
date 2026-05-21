@@ -8,8 +8,8 @@ export default function SignIn() {
     return (
         <>
             <PageMeta
-                title="Sign In | Creative Dashboard"
-                description="Login to access the Creative Dashboard"
+                title="Sign In | ChaiForms"
+                description="Login to access the ChaiForms dashboard"
             />
             <AuthLayout>
                 <SignInForm />

@@ -60,7 +60,7 @@ export default function ForgotPassword() {
     return (
         <>
             <PageMeta
-                title="Forgot Password | Creative Dashboard"
+                title="Forgot Password | ChaiForms"
                 description="Request a password reset link."
             />
             <AuthLayout>
