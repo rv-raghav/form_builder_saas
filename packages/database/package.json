@@ -2,10 +2,10 @@
   "name": "@repo/database",
   "version": "1.0.0",
   "scripts": {
-    "db:migrate": "dotenv -- drizzle-kit migrate",
-    "db:generate": "dotenv -- drizzle-kit generate",
-    "db:seed": "dotenv -- tsx ./seed.ts",
-    "studio": "dotenv -- drizzle-kit studio"
+    "db:migrate": "dotenv -e ../../.env -- drizzle-kit migrate",
+    "db:generate": "dotenv -e ../../.env -- drizzle-kit generate",
+    "db:seed": "dotenv -e ../../.env -- tsx ./seed.ts",
+    "studio": "dotenv -e ../../.env -- drizzle-kit studio"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
