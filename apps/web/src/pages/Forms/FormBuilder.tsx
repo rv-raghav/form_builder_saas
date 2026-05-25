@@ -161,7 +161,7 @@ export default function FormBuilder() {
 
   return (
     <>
-      <PageMeta title={`Edit: ${title} | ChaiForms`} description="Form builder" />
+      <PageMeta title={`Edit: ${title} | LoomForm`} description="Form builder" />
       <PageBreadcrumb pageTitle="Form builder" />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -172,9 +172,29 @@ export default function FormBuilder() {
           {status}
         </Badge>
         {status === "published" && (
-          <span className="text-xs text-gray-500">
-            Public link (Phase 4): <code className="font-mono">/f/{slug}</code>
-          </span>
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span>Public link:</span>
+            <a
+              href={`/f/${slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono bg-gray-100 dark:bg-gray-850 px-2 py-0.5 rounded text-brand-600 dark:text-brand-400 hover:underline"
+            >
+              /f/{slug}
+            </a>
+            <Button
+              size="sm"
+              variant="outline"
+              className="py-0.5 px-2 text-[10px] h-6 flex items-center justify-center font-normal"
+              onClick={() => {
+                const url = `${window.location.origin}/f/${slug}`;
+                navigator.clipboard.writeText(url);
+                showSuccess("Form link copied to clipboard!");
+              }}
+            >
+              Copy Link
+            </Button>
+          </div>
         )}
       </div>
 

@@ -27,7 +27,7 @@ export default function Pricing() {
     <div className="min-h-screen bg-gray-950 text-white">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <Link to="/" className="text-xl font-semibold">
-          ChaiForms
+          LoomForm
         </Link>
         <nav className="flex items-center gap-4 text-sm">
           <Link to="/signin" className="text-gray-300 hover:text-white">

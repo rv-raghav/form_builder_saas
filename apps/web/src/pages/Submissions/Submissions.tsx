@@ -159,7 +159,7 @@ export default function Submissions() {
 
   return (
     <>
-      <PageMeta title="Submissions | ChaiForms" description="Responses and analytics" />
+      <PageMeta title="Submissions | LoomForm" description="Responses and analytics" />
       <PageBreadcrumb pageTitle="Submissions" />
 
       <div className="relative overflow-hidden rounded-3xl border border-gray-200/70 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#0B1020]/65">

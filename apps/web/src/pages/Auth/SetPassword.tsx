@@ -77,8 +77,8 @@ export default function SetPassword() {
     return (
         <>
             <PageMeta
-                title="Set Your Password | ChaiForms"
-                description="Set your password for ChaiForms"
+                title="Set Your Password | LoomForm"
+                description="Set your password for LoomForm"
             />
             <AuthLayout>
                 <div className="flex flex-col flex-1">

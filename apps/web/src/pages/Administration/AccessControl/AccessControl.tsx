@@ -304,7 +304,7 @@ const AccessControl: React.FC = () => {
     return (
         <div>
             <PageMeta
-                title="Access Control | ChaiForms"
+                title="Access Control | LoomForm"
                 description="Manage role-based access for pages and their nested components"
             />
             <PageBreadcrumb pageTitle="Access Control" />

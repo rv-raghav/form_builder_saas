@@ -60,7 +60,7 @@ export default function ForgotPassword() {
     return (
         <>
             <PageMeta
-                title="Forgot Password | ChaiForms"
+                title="Forgot Password | LoomForm"
                 description="Request a password reset link."
             />
             <AuthLayout>

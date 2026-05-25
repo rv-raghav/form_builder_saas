@@ -388,7 +388,7 @@ function UserManagement() {
 
             <div>
                 <PageMeta
-                    title="User Management | ChaiForms"
+                    title="User Management | LoomForm"
                     description="Manage users and their roles"
                 />
                 <PageBreadcrumb pageTitle="User Management" />

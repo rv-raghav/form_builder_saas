@@ -8,8 +8,8 @@ export default function SignIn() {
     return (
         <>
             <PageMeta
-                title="Sign In | ChaiForms"
-                description="Login to access the ChaiForms dashboard"
+                title="Sign In | LoomForm"
+                description="Login to access the LoomForm dashboard"
             />
             <AuthLayout>
                 <SignInForm />

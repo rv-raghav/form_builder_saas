@@ -10,7 +10,7 @@ const envSchema = z.object({
   COOKIE_DOMAIN: z.string().optional(),
   APP_URL: z.string().url().default("http://localhost:3000"),
   API_URL: z.string().url().default("http://localhost:8000"),
-  EMAIL_FROM: z.string().optional().default("noreply@chaiforms.local"),
+  EMAIL_FROM: z.string().optional().default("noreply@loomform.local"),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.string().optional(),
   SMTP_USER: z.string().optional(),

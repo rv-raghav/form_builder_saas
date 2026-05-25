@@ -13,7 +13,7 @@ export async function notifyCreatorNewResponse(input: {
   responsePreview: string;
 }): Promise<void> {
   const host = env.SMTP_HOST;
-  const from = env.EMAIL_FROM ?? "noreply@chaiforms.local";
+  const from = env.EMAIL_FROM ?? "noreply@loomform.local";
 
   const subject = `New response: ${input.formTitle}`;
   const fillUrl = `${env.APP_URL.replace(/\/$/, "")}/f/${input.formSlug}`;

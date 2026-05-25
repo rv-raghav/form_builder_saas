@@ -69,8 +69,8 @@ export default function ResetPassword() {
     return (
         <>
             <PageMeta
-                title="Reset Password | ChaiForms"
-                description="Reset password page for ChaiForms"
+                title="Reset Password | LoomForm"
+                description="Reset password page for LoomForm"
             />
             <AuthLayout>
                 <div className="flex flex-col flex-1">

@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 
-## ChaiForms — Form Builder SaaS (working title)
+## LoomForm — Form Builder SaaS (working title)
 
 | Field | Value |
 |-------|--------|
@@ -25,7 +25,7 @@ The monorepo already contains:
 
 **Immediate priority (Phase 1):** Implement **backend authentication & authorization** (email/password, sessions, roles) so sign-in/sign-up works and users can reach a **marketing landing page** → **creator dashboard**. Strip unrelated creative/marketing features from the frontend in parallel or immediately after auth works.
 
-**Product name:** Hackathon name is *ChaiForms*; final branding TBD.
+**Product name:** Hackathon name is *LoomForm*; final branding TBD.
 
 ---
 
@@ -387,7 +387,7 @@ SMTP_HOST=
 SMTP_PORT=
 SMTP_USER=
 SMTP_PASS=
-EMAIL_FROM=noreply@chaiforms.local
+EMAIL_FROM=noreply@loomform.local
 ```
 
 #### Phase 1 acceptance criteria
@@ -575,7 +575,7 @@ pnpm --filter @repo/api dev
 
 | # | Decision | Default |
 |---|----------|---------|
-| D1 | Final product name | ChaiForms (TBD) |
+| D1 | Final product name | LoomForm (TBD) |
 | D2 | Auth transport | HttpOnly session cookie + CSRF (match existing web) |
 | D3 | REST vs tRPC for web Phase 1 | REST compatibility layer (Option A §7.1) |
 | D4 | Email in Phase 1 | Console-log reset links; SMTP in Phase 5 |

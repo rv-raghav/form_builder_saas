@@ -9,14 +9,14 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import AppLayout from "./layout/AppLayout";
 
-import SignIn from "./pages/Auth/SignIn";
-import SignUp from "./pages/Auth/SignUp";
-import ForgotPassword from "./pages/Auth/ForgotPassword";
-import ResetPassword from "./pages/Auth/ResetPassword";
-import SetPassword from "./pages/Auth/SetPassword";
-import NotFound from "./pages/Error/NotFound";
-import Landing from "./pages/Marketing/Landing";
-import Pricing from "./pages/Marketing/Pricing";
+const Landing = lazy(() => import("./pages/Marketing/Landing"));
+const Pricing = lazy(() => import("./pages/Marketing/Pricing"));
+const SignIn = lazy(() => import("./pages/Auth/SignIn"));
+const SignUp = lazy(() => import("./pages/Auth/SignUp"));
+const ForgotPassword = lazy(() => import("./pages/Auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/Auth/ResetPassword"));
+const SetPassword = lazy(() => import("./pages/Auth/SetPassword"));
+const NotFound = lazy(() => import("./pages/Error/NotFound"));
 
 const DashboardHome = lazy(() => import("./pages/Dashboard/DashboardHome"));
 const UserProfile = lazy(() => import("./pages/UserProfile/UserProfile"));
@@ -58,8 +58,8 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/" element={<LazyPage><Landing /></LazyPage>} />
+          <Route path="/pricing" element={<LazyPage><Pricing /></LazyPage>} />
 
           <Route path="/explore" element={<LazyPage><Explore /></LazyPage>} />
           <Route path="/f/:slug" element={<LazyPage><FormFill /></LazyPage>} />
@@ -69,13 +69,13 @@ export default function App() {
           />
 
           <Route element={<PublicRoute />}>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/signin" element={<LazyPage><SignIn /></LazyPage>} />
+            <Route path="/signup" element={<LazyPage><SignUp /></LazyPage>} />
+            <Route path="/forgot-password" element={<LazyPage><ForgotPassword /></LazyPage>} />
+            <Route path="/reset-password" element={<LazyPage><ResetPassword /></LazyPage>} />
           </Route>
 
-          <Route path="/set-password" element={<SetPassword />} />
+          <Route path="/set-password" element={<LazyPage><SetPassword /></LazyPage>} />
 
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
@@ -153,7 +153,7 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
         </Routes>
       </Router>
     </AuthProvider>

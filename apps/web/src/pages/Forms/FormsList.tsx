@@ -85,7 +85,7 @@ export default function FormsList() {
 
   return (
     <>
-      <PageMeta title="Forms | ChaiForms" description="Manage your forms" />
+      <PageMeta title="Forms | LoomForm" description="Manage your forms" />
       <PageBreadcrumb pageTitle="Forms" />
 
       <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
@@ -198,6 +198,19 @@ export default function FormsList() {
                         >
                           Edit
                         </Button>
+                        {form.status === "published" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              const url = `${window.location.origin}/f/${form.slug}`;
+                              navigator.clipboard.writeText(url);
+                              showSuccess("Form link copied to clipboard!");
+                            }}
+                          >
+                            Copy Link
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="ghost"
