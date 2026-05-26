@@ -1,7 +1,7 @@
 import { eq, and, gt } from "drizzle-orm";
 import { db } from "@repo/database";
 import { sessionsTable, usersTable } from "@repo/database/schema";
-import type { SelectUser } from "@repo/database/schema";
+import type { SelectSession, SelectUser } from "@repo/database/schema";
 import { generateSecureToken, hashToken } from "./password";
 
 const SESSION_COOKIE_NAME = "session_id";
@@ -25,6 +25,7 @@ export async function createSession(
   await db.insert(sessionsTable).values({
     userId,
     tokenHash: hashToken(token),
+    rememberMe,
     expiresAt,
   });
 
@@ -44,9 +45,16 @@ export async function revokeAllUserSessions(userId: string): Promise<void> {
 export async function getUserBySessionToken(
   token: string,
 ): Promise<SelectUser | null> {
+  const record = await getSessionRecordByToken(token);
+  return record?.user ?? null;
+}
+
+async function getSessionRecordByToken(
+  token: string,
+): Promise<{ user: SelectUser; session: SelectSession } | null> {
   const now = new Date();
   const rows = await db
-    .select({ user: usersTable })
+    .select({ user: usersTable, session: sessionsTable })
     .from(sessionsTable)
     .innerJoin(usersTable, eq(sessionsTable.userId, usersTable.id))
     .where(
@@ -57,16 +65,16 @@ export async function getUserBySessionToken(
     )
     .limit(1);
 
-  const user = rows[0]?.user;
-  if (!user || !user.isActive) return null;
-  return user;
+  const record = rows[0];
+  if (!record?.user || !record.user.isActive) return null;
+  return record;
 }
 
 export async function extendSession(token: string): Promise<Date | null> {
-  const user = await getUserBySessionToken(token);
-  if (!user) return null;
+  const record = await getSessionRecordByToken(token);
+  if (!record) return null;
 
-  const expiresAt = getSessionExpiry(false);
+  const expiresAt = getSessionExpiry(record.session.rememberMe);
   await db
     .update(sessionsTable)
     .set({ expiresAt })

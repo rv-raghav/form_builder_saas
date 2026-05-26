@@ -36,6 +36,13 @@
       "when": 1779713505374,
       "tag": "0004_tidy_vance_astro",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1779807000000,
+      "tag": "0005_session_remember_me",
+      "breakpoints": true
     }
   ]
 }

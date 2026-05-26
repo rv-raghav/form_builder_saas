@@ -97,11 +97,12 @@ authRouter.get("/auth/me/", async (req, res) => {
 
 authRouter.post("/auth/refresh/", csrfProtection, async (req, res) => {
   const token = getSessionToken(req);
-  const ok = await authService.refresh(token);
-  if (!ok) {
+  const expiresAt = await authService.refresh(token);
+  if (!token || !expiresAt) {
     res.status(401).json({ detail: "Session expired." });
     return;
   }
+  setSessionCookie(res, token, expiresAt);
   res.json({ success: true });
 });
 

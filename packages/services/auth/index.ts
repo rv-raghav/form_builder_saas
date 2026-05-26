@@ -3,10 +3,11 @@ import { db } from "@repo/database";
 import {
   usersTable,
   passwordResetTokensTable,
+  sessionsTable,
 } from "@repo/database/schema";
 import type { SelectUser } from "@repo/database/schema";
-import { logger } from "@repo/logger";
 import { env } from "../env";
+import { sendPasswordResetEmail } from "../email/password-reset";
 import {
   hashPassword,
   verifyPassword,
@@ -137,10 +138,10 @@ export class AuthService {
     }
   }
 
-  async refresh(sessionToken: string | undefined): Promise<boolean> {
-    if (!sessionToken) return false;
+  async refresh(sessionToken: string | undefined): Promise<Date | null> {
+    if (!sessionToken) return null;
     const expiresAt = await extendSession(sessionToken);
-    return expiresAt !== null;
+    return expiresAt;
   }
 
   async forcePasswordChange(
@@ -190,7 +191,10 @@ export class AuthService {
     });
 
     const resetUrl = `${env.APP_URL}/reset-password?token=${token}`;
-    logger.info(`Password reset link for ${normalized}: ${resetUrl}`);
+    await sendPasswordResetEmail({
+      to: normalized,
+      resetUrl,
+    });
   }
 
   async confirmPasswordReset(input: {
@@ -227,15 +231,26 @@ export class AuthService {
     }
 
     const passwordHash = await hashPassword(input.password);
-    await db
-      .update(usersTable)
-      .set({ passwordHash, mustResetPassword: false })
-      .where(eq(usersTable.id, resetRow.userId));
+    await db.transaction(async (tx) => {
+      await tx
+        .update(usersTable)
+        .set({ passwordHash, mustResetPassword: false })
+        .where(eq(usersTable.id, resetRow.userId));
 
-    await db
-      .update(passwordResetTokensTable)
-      .set({ usedAt: now })
-      .where(eq(passwordResetTokensTable.id, resetRow.id));
+      await tx
+        .delete(sessionsTable)
+        .where(eq(sessionsTable.userId, resetRow.userId));
+
+      await tx
+        .update(passwordResetTokensTable)
+        .set({ usedAt: now })
+        .where(
+          and(
+            eq(passwordResetTokensTable.userId, resetRow.userId),
+            isNull(passwordResetTokensTable.usedAt),
+          ),
+        );
+    });
   }
 }
 

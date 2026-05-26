@@ -35,7 +35,7 @@ const allowedOrigins = [env.APP_URL, "http://localhost:3000", "http://127.0.0.1:
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV !== "prod") {
+      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV !== "production") {
         callback(null, true);
       } else {
         callback(null, false);

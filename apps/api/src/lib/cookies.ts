@@ -7,8 +7,8 @@ export const CSRF_COOKIE = "csrftoken";
 function baseCookieOptions(maxAgeMs: number): CookieOptions {
   return {
     httpOnly: true,
-    secure: env.COOKIE_SECURE ?? false,
-    sameSite: "lax",
+    secure: env.COOKIE_SECURE,
+    sameSite: env.COOKIE_SAMESITE,
     domain: env.COOKIE_DOMAIN || undefined,
     maxAge: maxAgeMs,
     path: "/",
@@ -34,8 +34,8 @@ export function clearSessionCookie(res: Response): void {
 export function setCsrfCookie(res: Response, token: string): void {
   res.cookie(CSRF_COOKIE, token, {
     httpOnly: false,
-    secure: env.COOKIE_SECURE ?? false,
-    sameSite: "lax",
+    secure: env.COOKIE_SECURE,
+    sameSite: env.COOKIE_SAMESITE,
     domain: env.COOKIE_DOMAIN || undefined,
     maxAge: 24 * 60 * 60 * 1000,
     path: "/",
