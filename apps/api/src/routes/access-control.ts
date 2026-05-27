@@ -6,7 +6,7 @@ import { loadActorFromAuth } from "../lib/actor";
 
 const accessControlRouter = Router();
 
-accessControlRouter.use(requireAuth, requireAdmin);
+accessControlRouter.use("/access-control", requireAuth, requireAdmin);
 
 function handleError(err: unknown, res: import("express").Response) {
   if (err instanceof AdminError) {

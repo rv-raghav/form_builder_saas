@@ -10,7 +10,8 @@ import { loadActorFromAuth } from "../lib/actor";
 
 const usersRouter = Router();
 
-usersRouter.use(requireAuth, requireAdmin);
+usersRouter.use("/users", requireAuth, requireAdmin);
+usersRouter.use("/roles", requireAuth, requireAdmin);
 
 function handleError(err: unknown, res: import("express").Response) {
   if (err instanceof AdminError) {
