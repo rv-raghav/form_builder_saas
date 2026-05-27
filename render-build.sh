@@ -4,12 +4,15 @@ set -euo pipefail
 echo "==> Installing pnpm..."
 npm install -g pnpm@9
 
-echo "==> Installing dependencies..."
-pnpm install --frozen-lockfile
+echo "==> Installing dependencies (including devDependencies for build tools)..."
+# Force NODE_ENV=development during install so pnpm doesn't skip devDependencies
+# (drizzle-kit is a devDependency needed for migrations)
+NODE_ENV=development pnpm install --frozen-lockfile
 
 echo "==> Running database migrations..."
+# Run drizzle-kit directly (env vars like DATABASE_URL are provided by Render)
 cd packages/database
-pnpm run db:migrate
+npx drizzle-kit migrate
 cd ../..
 
 echo "==> Building API..."
