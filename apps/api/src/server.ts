@@ -30,14 +30,32 @@ openApiDocument.paths = {
   ...openApiDocument.paths,
 };
 
-const allowedOrigins = [env.APP_URL, "http://localhost:3000", "http://127.0.0.1:3000"];
+const sanitizeOrigin = (url: string) => url.trim().replace(/\/$/, "");
+
+const allowedOrigins = [
+  sanitizeOrigin(env.APP_URL),
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV !== "production") {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const normalizedOrigin = sanitizeOrigin(origin);
+      const isAllowed =
+        allowedOrigins.includes(normalizedOrigin) ||
+        normalizedOrigin.endsWith(".vercel.app") ||
+        env.NODE_ENV !== "production";
+
+      if (isAllowed) {
         callback(null, true);
       } else {
+        logger.warn(`CORS blocked: Origin ${origin} is not allowed. Allowed origins: ${allowedOrigins.join(", ")}`);
         callback(null, false);
       }
     },
