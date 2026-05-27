@@ -11,7 +11,12 @@ import {
   type SelectUser,
   type UserRole,
 } from "@repo/database/schema";
-import { PAGE_CATALOG, COMPONENT_CATALOG } from "@repo/database/catalog";
+import {
+  PAGE_CATALOG,
+  COMPONENT_CATALOG,
+  DEFAULT_ROLE_PAGE_ACCESS,
+  DEFAULT_ROLE_COMPONENT_ACCESS,
+} from "@repo/database/catalog";
 
 export type OverrideAction = "grant" | "revoke";
 
@@ -113,17 +118,18 @@ export async function resolvePermissionsForUser(user: SelectUser): Promise<{
   }
 
   const role = await loadRoleBySlug(user.role);
-  if (!role) {
-    return { allowed_pages: [], allowed_components: [] };
-  }
-
-  const pageAccess = await loadRolePageAccess(role.id);
-  const componentAccess = await loadRoleComponentAccess(role.id);
+  const pageAccess = role ? await loadRolePageAccess(role.id) : new Map<string, boolean>();
+  const componentAccess = role ? await loadRoleComponentAccess(role.id) : new Map<string, boolean>();
   const overrides = await loadUserOverrides(user.id);
+
+  const defaultPageSlugs = DEFAULT_ROLE_PAGE_ACCESS[user.role] ?? new Set();
+  const defaultComponentSlugs = DEFAULT_ROLE_COMPONENT_ACCESS[user.role] ?? new Set();
 
   const allowed_pages: AllowedPage[] = [];
   for (const page of PAGE_CATALOG) {
-    const roleDefault = pageAccess.get(page.slug) ?? false;
+    const roleDefault = role && pageAccess.has(page.slug)
+      ? pageAccess.get(page.slug)!
+      : defaultPageSlugs.has(page.slug);
     const override = overrides.get(`page:${page.slug}`);
     if (applyOverride(roleDefault, override)) {
       allowed_pages.push({
@@ -136,7 +142,9 @@ export async function resolvePermissionsForUser(user: SelectUser): Promise<{
 
   const allowed_components: AllowedComponent[] = [];
   for (const comp of COMPONENT_CATALOG) {
-    const roleDefault = componentAccess.get(comp.slug) ?? false;
+    const roleDefault = role && componentAccess.has(comp.slug)
+      ? componentAccess.get(comp.slug)!
+      : defaultComponentSlugs.has(comp.slug);
     const override = overrides.get(`component:${comp.slug}`);
     if (applyOverride(roleDefault, override)) {
       allowed_components.push({
@@ -211,9 +219,16 @@ export async function getEffectivePermissions(
     componentsByPage.set(comp.pageSlug, list);
   }
 
+  const defaultPageSlugs = DEFAULT_ROLE_PAGE_ACCESS[user.role] ?? new Set();
+  const defaultComponentSlugs = DEFAULT_ROLE_COMPONENT_ACCESS[user.role] ?? new Set();
+
   const pages = PAGE_CATALOG.map((page) => {
     const roleDefault =
-      user.role === "superadmin" ? true : (pageAccess.get(page.slug) ?? false);
+      user.role === "superadmin"
+        ? true
+        : role && pageAccess.has(page.slug)
+          ? pageAccess.get(page.slug)!
+          : defaultPageSlugs.has(page.slug);
     const override = overrides.get(`page:${page.slug}`) ?? null;
     const final =
       user.role === "superadmin"
@@ -224,7 +239,9 @@ export async function getEffectivePermissions(
       const compRoleDefault =
         user.role === "superadmin"
           ? true
-          : (componentAccess.get(comp.slug) ?? false);
+          : role && componentAccess.has(comp.slug)
+            ? componentAccess.get(comp.slug)!
+            : defaultComponentSlugs.has(comp.slug);
       const compOverride = overrides.get(`component:${comp.slug}`) ?? null;
       return {
         slug: comp.slug,
