@@ -1,0 +1,61 @@
+# ──────────────────────────────────────────────
+# Render Blueprint — LoomForm API + Postgres
+# Commit this file to your repo root and connect
+# via Render Dashboard → "New Blueprint Instance"
+# ──────────────────────────────────────────────
+
+databases:
+  - name: loomform-db
+    plan: free          # or starter, standard, etc.
+    databaseName: loomform
+    user: loomform
+
+services:
+  - type: web
+    name: loomform-api
+    runtime: node
+    plan: free          # or starter, standard, etc.
+    buildCommand: chmod +x render-build.sh && ./render-build.sh
+    startCommand: node apps/api/dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: loomform-db
+          property: connectionString
+      - key: BASE_URL
+        sync: false      # you'll set this after first deploy (Render gives you the URL)
+      - key: API_URL
+        sync: false
+      - key: APP_URL
+        sync: false      # your Vercel frontend URL
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: CSRF_SECRET
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: "none"    # needed for cross-origin (Vercel frontend ↔ Render API)
+      - key: COOKIE_DOMAIN
+        sync: false      # optional, set if using custom domain
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_OAUTH_REDIRECT_URI
+        sync: false
