@@ -20,8 +20,7 @@ const envSchema = z.object({
     .transform((v) => v === "true"),
   COOKIE_SAMESITE: z
     .enum(["lax", "strict", "none"])
-    .optional()
-    .default("lax"),
+    .optional(),
   COOKIE_DOMAIN: z.string().optional(),
   APP_URL: z.string().url().default("http://localhost:3000"),
 });
@@ -32,6 +31,7 @@ function createEnv(env: NodeJS.ProcessEnv) {
 
   const parsed = safeParseResult.data;
   const cookieSecure = parsed.COOKIE_SECURE ?? parsed.NODE_ENV === "production";
+  const cookieSameSite = parsed.COOKIE_SAMESITE ?? (parsed.NODE_ENV === "production" ? "none" : "lax");
 
   if (parsed.NODE_ENV === "production") {
     if (parsed.SESSION_SECRET === DEFAULT_SESSION_SECRET) {
@@ -42,13 +42,14 @@ function createEnv(env: NodeJS.ProcessEnv) {
     }
   }
 
-  if (parsed.COOKIE_SAMESITE === "none" && !cookieSecure) {
+  if (cookieSameSite === "none" && !cookieSecure) {
     throw new Error("COOKIE_SAMESITE=none requires COOKIE_SECURE=true.");
   }
 
   return {
     ...parsed,
     COOKIE_SECURE: cookieSecure,
+    COOKIE_SAMESITE: cookieSameSite,
   };
 }
 
