@@ -36,3 +36,12 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# TypeScript Cache
+*.tsbuildinfo
+
+# Linter Cache
+.eslintcache
+
+# Package Manager Logs
+pnpm-debug.log*
